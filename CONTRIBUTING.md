@@ -1,1 +1,1 @@
-You can contribute your ideas and suggestions here by raising Issues in my #sammple-projects repository. I would like to thank in advance for making effort to raise the issues/suggestions by reviewing my repository.
+You can contribute your ideas and suggestions here by raising Issues in my https://github.com/jagatpanchal22/sample-projects/ repository. I would like to thank in advance for making effort to raise the issues/suggestions by reviewing my repository.
