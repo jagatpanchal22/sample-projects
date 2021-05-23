@@ -4,6 +4,7 @@ from django.contrib.auth import settings
 
 # Create your models here.
 
+
 class Friend(models.Model):
     name = models.CharField(max_length=200)
 

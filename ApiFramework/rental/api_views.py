@@ -19,4 +19,3 @@ class BorrowedViewSet(viewsets.ModelViewSet):
     queryset = models.Borrowed.objects.all()
     serializer_class = serializers.BorrowedSerializer
     permission_classes = [permissions.DjangoModelPermissions]
-
