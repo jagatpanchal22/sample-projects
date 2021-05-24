@@ -7,23 +7,36 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Toy',
+            name="Toy",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('name', models.CharField(default='', max_length=150)),
-                ('description', models.CharField(blank=True, default='', max_length=250)),
-                ('toy_category', models.CharField(blank=True, default='', max_length=250)),
-                ('release_date', models.DateTimeField()),
-                ('was_include_in_home', models.BooleanField(default=False)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("name", models.CharField(default="", max_length=150)),
+                (
+                    "description",
+                    models.CharField(blank=True, default="", max_length=250),
+                ),
+                (
+                    "toy_category",
+                    models.CharField(blank=True, default="", max_length=250),
+                ),
+                ("release_date", models.DateTimeField()),
+                ("was_include_in_home", models.BooleanField(default=False)),
             ],
             options={
-                'ordering': ('name',),
+                "ordering": ("name",),
             },
         ),
     ]
