@@ -22,7 +22,7 @@ class Order(models.Model):
     destination = models.CharField(max_length=120, null=False, blank=False)
     order_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=ORDER_STATUS)
-    order_by = models.ForeignKey(Company, related_name='order', on_delete=models.CASCADE, blank=True, null=True)
+    order_by = models.ForeignKey(Company, related_name='orders', on_delete=models.CASCADE, blank=True, null=True)
     managed_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
