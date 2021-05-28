@@ -5,6 +5,7 @@ from . import models
 
 class CompanySerializer(serializers.HyperlinkedModelSerializer):
     orders = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    # orders = serializers.HyperlinkedIdentityField(view_name='order-detail')
 
     class Meta:
         model = models.Company
@@ -20,6 +21,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
     user = UserSerializer(read_only=True)
     company = CompanySerializer(source="orders", many=True, read_only=True)
+    # order_by = serializers.HyperlinkedRelatedField(many=True, view_name='order-detail', read_only=True)
 
     class Meta:
         model = models.Order
@@ -29,8 +31,9 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
             "summary",
             "user",
             "company",
+            # "order_by",
             "source",
             "destination",
             "order_date",
         )
-        depth = 3
+        # depth = 3

@@ -4,6 +4,7 @@ from django.urls import path, include
 from . import views as ApiViews
 from django.conf.urls import url
 from rest_framework_nested import routers
+from rest_framework.authtoken import views
 
 # routers = routers.SimpleRouter()
 # routers.register("company", ApiViews.CompanyViewSet)
@@ -29,5 +30,5 @@ urlpatterns = [
     path("", include(orders_router.urls)),
     path("", include(order_router.urls)),
     path("", include(user_router.urls)),
-    path("api-auth/", include("rest_framework.urls")),
+    path("api-auth/", views.obtain_auth_token),
 ]
