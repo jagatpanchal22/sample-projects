@@ -9,20 +9,33 @@ class CompanyViewSet(viewsets.ModelViewSet):
     serializer_class = CompanySerializer
 
 
-class OrderViewSet(viewsets.ModelViewSet):
+class DefaultOrderViewSet(viewsets.ModelViewSet):
     """Viewset of Order"""
-    queryset = Order.objects.all().select_related('order_by').prefetch_related('users')
+
+    queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
+
+class OrderViewSet(viewsets.ModelViewSet):
+    """Viewset of Order"""
+
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+    # return None
+
     def get_queryset(self, *args, **kwargs):
-        company_id = self.kwargs.get("order_by")
-        print(company_id)
-        return None
-        # try:
-        #     company = Company.objects.get(id=company_id)
-        # except Company.DoesNotExist:
-        #     raise NotFound('A Company with this id does not exist')
-        # return self.queryset.filter(order_by=company)
+        company_id = self.kwargs["company_pk"]
+        try:
+            orders = Order.objects.filter(order_by=company_id)
+            print(orders)
+            # print(orders)
+            # result = OrderSerializer(data=orders, context={'request': self.request}).is_valid()
+            # print(result)
+            # print(result.data)
+        except Order.DoesNotExist:
+            raise NotFound("No order placed")
+        return orders
 
 
 class UserViewSet(viewsets.ModelViewSet):

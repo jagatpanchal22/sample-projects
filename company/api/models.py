@@ -13,8 +13,14 @@ class Company(models.Model):
 
 
 class Order(models.Model):
-    ORDER_STATUS = [('OPEN', 'Ordered'), ('SHIPPED', 'In Shipping'), ('CANCELLED', 'Cancelled'),
-                    ('DELIVERED', 'Delivered'), ('RETURNED', 'Returned'), ('PENDING', 'Pending')]
+    ORDER_STATUS = [
+        ("OPEN", "Ordered"),
+        ("SHIPPED", "In Shipping"),
+        ("CANCELLED", "Cancelled"),
+        ("DELIVERED", "Delivered"),
+        ("RETURNED", "Returned"),
+        ("PENDING", "Pending"),
+    ]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     summary = models.CharField(max_length=120, null=False, blank=False)
     description = models.CharField(max_length=200, null=True, blank=True)
@@ -22,9 +28,16 @@ class Order(models.Model):
     destination = models.CharField(max_length=120, null=False, blank=False)
     order_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=ORDER_STATUS)
-    order_by = models.ForeignKey(Company, related_name='order', on_delete=models.CASCADE, blank=True, null=True)
-    managed_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    order_by = models.ForeignKey(
+        Company,
+        related_name="orders",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    managed_by = models.ForeignKey(
+        User, on_delete=models.CASCADE, blank=True, null=True
+    )
 
     def __str__(self):
         return self.summary
-
