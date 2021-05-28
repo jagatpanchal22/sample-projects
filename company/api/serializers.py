@@ -8,20 +8,29 @@ class CompanySerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = models.Company
-        fields = ('url', 'pk', 'name', 'location', 'orders')
+        fields = ("url", "pk", "name", "location", "orders")
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('url', 'pk', 'username', 'first_name', 'last_name', 'email')
+        fields = ("url", "pk", "username", "first_name", "last_name", "email")
 
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
     user = UserSerializer(read_only=True)
-    company = CompanySerializer(source='orders', many=True, read_only=True)
+    company = CompanySerializer(source="orders", many=True, read_only=True)
 
     class Meta:
         model = models.Order
-        fields = ('url', 'pk', 'summary', 'user', 'company', 'source', 'destination', 'order_date')
+        fields = (
+            "url",
+            "pk",
+            "summary",
+            "user",
+            "company",
+            "source",
+            "destination",
+            "order_date",
+        )
         depth = 3

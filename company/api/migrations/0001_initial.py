@@ -16,25 +16,81 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Company',
+            name="Company",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=120, unique=True, verbose_name='Name')),
-                ('location', models.CharField(max_length=200, verbose_name='Location')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=120, unique=True, verbose_name="Name"
+                    ),
+                ),
+                (
+                    "location",
+                    models.CharField(max_length=200, verbose_name="Location"),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Order',
+            name="Order",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('summary', models.CharField(max_length=120)),
-                ('description', models.CharField(blank=True, max_length=200, null=True)),
-                ('source', models.CharField(max_length=120)),
-                ('destination', models.CharField(max_length=120)),
-                ('order_date', models.DateTimeField(auto_now_add=True)),
-                ('status', models.CharField(choices=[('OPEN', 'Ordered'), ('SHIPPED', 'In Shipping'), ('CANCELLED', 'Cancelled'), ('DELIVERED', 'Delivered'), ('RETURNED', 'Returned'), ('PENDING', 'Pending')], max_length=20)),
-                ('managed_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('order_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='api.company')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("summary", models.CharField(max_length=120)),
+                (
+                    "description",
+                    models.CharField(blank=True, max_length=200, null=True),
+                ),
+                ("source", models.CharField(max_length=120)),
+                ("destination", models.CharField(max_length=120)),
+                ("order_date", models.DateTimeField(auto_now_add=True)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("OPEN", "Ordered"),
+                            ("SHIPPED", "In Shipping"),
+                            ("CANCELLED", "Cancelled"),
+                            ("DELIVERED", "Delivered"),
+                            ("RETURNED", "Returned"),
+                            ("PENDING", "Pending"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "managed_by",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "order_by",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="api.company",
+                    ),
+                ),
             ],
         ),
     ]

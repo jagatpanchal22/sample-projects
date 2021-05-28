@@ -11,19 +11,21 @@ class CompanyViewSet(viewsets.ModelViewSet):
 
 class DefaultOrderViewSet(viewsets.ModelViewSet):
     """Viewset of Order"""
+
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
 
 class OrderViewSet(viewsets.ModelViewSet):
     """Viewset of Order"""
+
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
     # return None
 
     def get_queryset(self, *args, **kwargs):
-        company_id = self.kwargs['company_pk']
+        company_id = self.kwargs["company_pk"]
         try:
             orders = Order.objects.filter(order_by=company_id)
             print(orders)
@@ -32,7 +34,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             # print(result)
             # print(result.data)
         except Order.DoesNotExist:
-            raise NotFound('No order placed')
+            raise NotFound("No order placed")
         return orders
 
 
