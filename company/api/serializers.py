@@ -1,39 +1,18 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
 from . import models
 
 
-class CompanySerializer(serializers.HyperlinkedModelSerializer):
-    orders = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    # orders = serializers.HyperlinkedIdentityField(view_name='order-detail')
-
+class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Company
-        fields = ("url", "pk", "name", "location", "orders")
+        fields = "__all__"
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ("url", "pk", "username", "first_name", "last_name", "email")
-
-
-class OrderSerializer(serializers.HyperlinkedModelSerializer):
-    user = UserSerializer(read_only=True)
-    company = CompanySerializer(source="orders", many=True, read_only=True)
-    # order_by = serializers.HyperlinkedRelatedField(many=True, view_name='order-detail', read_only=True)
+class OrderSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        order = models.Order.objects.create(**validated_data)
+        return order
 
     class Meta:
         model = models.Order
-        fields = (
-            "url",
-            "pk",
-            "summary",
-            "user",
-            "company",
-            # "order_by",
-            "source",
-            "destination",
-            "order_date",
-        )
-        # depth = 3
+        fields = "__all__"
