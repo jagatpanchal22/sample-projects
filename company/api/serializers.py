@@ -1,39 +1,40 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
 from . import models
 
 
-class CompanySerializer(serializers.HyperlinkedModelSerializer):
-    orders = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    # orders = serializers.HyperlinkedIdentityField(view_name='order-detail')
-
+class CompanySerializer(serializers.ModelSerializer):
+    # Serializer for the Company model, in fields we specify the model attributes we want to
+    # deserialize and serialize
     class Meta:
         model = models.Company
-        fields = ("url", "pk", "name", "location", "orders")
+        # fields = ['id', 'name', 'location']
+        fields = '__all__'
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ("url", "pk", "username", "first_name", "last_name", "email")
+class OrderSerializer(serializers.ModelSerializer):
+    # ingredients = serializers.SerializerMethodField('get_ingredients')
+    #
+    # def encode_thumbnail(self, recipe):
+    #     with open(os.path.join(settings.MEDIA_ROOT, recipe.thumbnail.name), "rb") as image_file:
+    #         return base64.b64encode(image_file.read())
+    #
+    # def get_ingredients(self, recipe):
+    #     try:
+    #         recipe_ingredients = models.Ingredient.objects.filter(recipe__id=recipe.id)
+    #         return IngredientSerializer(recipe_ingredients, many=True).data
+    #     except models.Ingredient.DoesNotExist:
+    #         return None
 
-
-class OrderSerializer(serializers.HyperlinkedModelSerializer):
-    user = UserSerializer(read_only=True)
-    company = CompanySerializer(source="orders", many=True, read_only=True)
-    # order_by = serializers.HyperlinkedRelatedField(many=True, view_name='order-detail', read_only=True)
+    def create(self, validated_data):
+        """
+        Create function for recipes, a restaurant and a list of ingredients is associated. The restaurantId
+        is taken from the corresponding path parameter and the ingredients can be added optionally in the post body.
+        """
+        # ingredients_data = validated_data.pop("ingredients")
+        order = models.Order.objects.create(**validated_data)
+        return order
 
     class Meta:
         model = models.Order
-        fields = (
-            "url",
-            "pk",
-            "summary",
-            "user",
-            "company",
-            # "order_by",
-            "source",
-            "destination",
-            "order_date",
-        )
-        # depth = 3
+        # fields = ['id', 'summary', 'by_company', 'order_date', 'status']
+        fields = '__all__'
