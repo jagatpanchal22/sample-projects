@@ -15,7 +15,9 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 class Company(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=120, unique=True, verbose_name="Company Name")
+    name = models.CharField(
+        max_length=120, unique=True, verbose_name="Company Name"
+    )
     location = models.CharField(max_length=120, verbose_name="Address")
 
     def __str__(self):
@@ -38,9 +40,11 @@ class Order(models.Model):
     destination = models.CharField(max_length=120, null=False, blank=False)
     by_company = models.ForeignKey(Company, on_delete=models.CASCADE)
     order_date = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=20, choices=ORDER_STATUS, default=ORDER_STATUS[0])
+    status = models.CharField(
+        max_length=20, choices=ORDER_STATUS, default=ORDER_STATUS[0]
+    )
     managed_by = models.ForeignKey(
-        User, on_delete=models.CASCADE, blank=True, null=True, default='1'
+        User, on_delete=models.CASCADE, blank=True, null=True, default="1"
     )
 
     def __str__(self):

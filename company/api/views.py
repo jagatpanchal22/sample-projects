@@ -4,13 +4,21 @@ from . import serializers
 from .models import Company, Order
 from django.http import Http404
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.authentication import (
+    SessionAuthentication,
+    TokenAuthentication,
+)
+from rest_framework.permissions import IsAuthenticated
 
 
 class CompanyList(APIView):
     """
-        List all company, or create a new company.
+    List all company, or create a new company.
     """
+
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         companies = Company.objects.all()
         serializer = serializers.CompanySerializer(companies, many=True)
@@ -28,6 +36,10 @@ class CompanyDetail(APIView):
     """
     Retrieve, update or delete a company instance.
     """
+
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get_object(self, pk):
         try:
             return Company.objects.get(pk=pk)
@@ -55,8 +67,12 @@ class CompanyDetail(APIView):
 
 class OrderList(APIView):
     """
-        List all Orders, or create a new order by company.
+    List all Orders, or create a new order by company.
     """
+
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, company_id):
         orders = Order.objects.filter(by_company_id__exact=company_id)
         serializer = serializers.OrderSerializer(orders, many=True)
@@ -74,6 +90,10 @@ class OrderDetail(APIView):
     """
     Retrieve, update or delete a company instance.
     """
+
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get_object(self, company_id, pk):
         try:
             return Order.objects.get(by_company_id__exact=company_id, pk=pk)
