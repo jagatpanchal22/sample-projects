@@ -4,13 +4,16 @@ from . import serializers
 from .models import Company, Order
 from django.http import Http404
 from rest_framework import status
+from rest_framework.decorators import api_view
 
 
-class Companies(APIView):
-
+class CompanyList(APIView):
+    """
+        List all company, or create a new company.
+    """
     def get(self, request):
-        Companies = Company.objects.all()
-        serializer = serializers.CompanySerializer(Companies, many=True)
+        companies = Company.objects.all()
+        serializer = serializers.CompanySerializer(companies, many=True)
         return Response(serializer.data)
 
     def post(self, request):
@@ -22,58 +25,75 @@ class Companies(APIView):
 
 
 class CompanyDetail(APIView):
-
-    def get(self, request, company_id):
+    """
+    Retrieve, update or delete a company instance.
+    """
+    def get_object(self, pk):
         try:
-            company = Company.objects.get(pk=company_id)
+            return Company.objects.get(pk=pk)
         except Company.DoesNotExist:
             raise Http404
+
+    def get(self, request, pk):
+        company = self.get_object(pk)
         serializer = serializers.CompanySerializer(company)
         return Response(serializer.data)
 
-    def delete(self, request, company_id):
-        try:
-            company = Company.objects.get(pk=company_id)
-        except Company.DoesNotExist:
-            raise Http404
+    def put(self, request, pk):
+        company = self.get_object(pk)
+        serializer = serializers.CompanySerializer(company, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        company = self.get_object(pk)
         company.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class Orders(APIView):
-
+class OrderList(APIView):
+    """
+        List all Orders, or create a new order by company.
+    """
     def get(self, request, company_id):
         orders = Order.objects.filter(by_company_id__exact=company_id)
         serializer = serializers.OrderSerializer(orders, many=True)
         return Response(serializer.data)
 
     def post(self, request, company_id):
-        try:
-            Company.objects.get(pk=company_id)
-        except Company.DoesNotExist:
-            raise Http404
-
         serializer = serializers.OrderSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(by_company_id__exact=company_id)
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class OrderDetail(APIView):
-
-    def get(self, request, company_id, order_id):
+    """
+    Retrieve, update or delete a company instance.
+    """
+    def get_object(self, company_id, pk):
         try:
-            order = Order.objects.get(by_company_id__exact=company_id, pk=order_id)
+            return Order.objects.get(by_company_id__exact=company_id, pk=pk)
         except Order.DoesNotExist:
             raise Http404
+
+    def get(self, request, company_id, pk):
+        order = self.get_object(company_id, pk)
         serializer = serializers.OrderSerializer(order)
         return Response(serializer.data)
 
-    def delete(self, request, company_id, order_id):
-        try:
-            recipe = Order.objects.get(by_company_id__exact=company_id, pk=order_id)
-        except Order.DoesNotExist:
-            raise Http404
-        recipe.delete()
+    def put(self, request, company_id, pk):
+        order = self.get_object(company_id, pk)
+        serializer = serializers.OrderSerializer(order, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, company_id, pk):
+        order = self.get_object(company_id, pk)
+        order.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
